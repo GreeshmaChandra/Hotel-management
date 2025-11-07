@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Book Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Book a Room</h1>
+    <nav><a href="index.html">Home</a> | <a href="view_rooms.php">View Rooms</a></nav>
+  </header>
+
+  <main class="container">
+    <form id="bookingForm" action="book.php" method="post">
+      <input type="hidden" id="room_id" name="room_id">
+      <label>Name: <input type="text" name="name" required></label>
+      <label>Email: <input type="email" name="email" required></label>
+      <label>Phone: <input type="text" name="phone" required></label>
+      <label>Room Type: <input type="text" name="room_type" id="room_type" readonly required></label>
+      <label>Check-in: <input type="date" name="checkin" required></label>
+      <label>Check-out: <input type="date" name="checkout" required></label>
+      <label>Price per night: ₹<input type="number" id="price" name="price" readonly></label>
+      <button type="submit">Confirm Booking</button>
+    </form>
+  </main>
+
+  <script>
+    // Pre-fill form from URL params
+    const params = new URLSearchParams(location.search);
+    if(params.has('roomid')) document.getElementById('room_id').value = params.get('roomid');
+    if(params.has('roomtype')) document.getElementById('room_type').value = params.get('roomtype');
+    if(params.has('price')) document.getElementById('price').value = params.get('price');
+
+    // Basic date validation (client-side)
+    document.getElementById('bookingForm').addEventListener('submit', function(e){
+      const ci = new Date(this.checkin.value);
+      const co = new Date(this.checkout.value);
+      if(co <= ci){
+        alert('Check-out must be after check-in.');
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
